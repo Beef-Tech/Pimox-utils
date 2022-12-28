@@ -59,6 +59,26 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
+msg_info "Installing Dependencies"
+$STD apt-get -y install \
+  sudo \
+  curl \
+  gnupg \
+  make \
+  g++ \
+  gcc \
+  ca-certificates \
+  apache2-utils \
+  logrotate \
+  build-essential \
+  python3-dev \
+  git \
+  lsb-release
+$STD apt-get install -y netcat
+$STD apt-get install -y dnsutils
+$STD apt-get install -y wget
+msg_ok "Installed Dependencies"
+
 set +e
 alias die=''
 if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
@@ -80,24 +100,6 @@ msg_info "Updating Container OS"
 $STD apt-get update
 $STD apt-get -y upgrade
 msg_ok "Updated Container OS"
-
-msg_info "Installing Dependencies"
-$STD apt-get update
-$STD apt-get -y install \
-  sudo \
-  curl \
-  gnupg \
-  make \
-  g++ \
-  gcc \
-  ca-certificates \
-  apache2-utils \
-  logrotate \
-  build-essential \
-  python3-dev \
-  git \
-  lsb-release
-msg_ok "Installed Dependencies"
 
 msg_info "Installing Python"
 $STD apt-get install -y -q --no-install-recommends python3 python3-pip python3-venv

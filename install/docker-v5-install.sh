@@ -59,6 +59,14 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
+msg_info "Installing Dependencies"
+apt-get install -y curl &>/dev/null
+apt-get install -y sudo &>/dev/null
+apt-get install -y netcat &>/dev/null
+apt-get install -y dnsutils &>/dev/null
+apt-get install -y wget &>/dev/null
+msg_ok "Installed Dependencies"
+
 set +e
 alias die=''
 if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
@@ -80,11 +88,6 @@ msg_info "Updating Container OS"
 $STD apt-get update
 $STD apt-get -y upgrade
 msg_ok "Updated Container OS"
-
-msg_info "Installing Dependencies"
-$STD apt-get install -y curl
-$STD apt-get install -y sudo
-msg_ok "Installed Dependencies"
 
 get_latest_release() {
   curl -sL https://api.github.com/repos/$1/releases/latest | grep '"tag_name":' | cut -d'"' -f4

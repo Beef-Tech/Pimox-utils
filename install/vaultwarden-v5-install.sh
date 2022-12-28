@@ -59,6 +59,21 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
+msg_info "Installing Dependencies"
+$STD apt-get -qqy install \
+  git \
+  build-essential \
+  pkgconf \
+  libssl-dev \
+  libmariadb-dev-compat \
+  libpq-dev \
+  curl \
+  sudo
+apt-get install -y netcat &>/dev/null
+apt-get install -y dnsutils &>/dev/null
+apt-get install -y wget &>/dev/null
+msg_ok "Installed Dependencies"
+
 set +e
 alias die=''
 if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
@@ -80,19 +95,6 @@ msg_info "Updating Container OS"
 $STD apt-get update
 $STD apt-get -y upgrade
 msg_ok "Updated Container OS"
-
-msg_info "Installing Dependencies"
-$STD apt-get update
-$STD apt-get -qqy install \
-  git \
-  build-essential \
-  pkgconf \
-  libssl-dev \
-  libmariadb-dev-compat \
-  libpq-dev \
-  curl \
-  sudo
-msg_ok "Installed Dependencies"
 
 WEBVAULT=$(curl -s https://api.github.com/repos/dani-garcia/bw_web_builds/releases/latest |
   grep "tag_name" |

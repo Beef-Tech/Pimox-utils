@@ -59,6 +59,19 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
+msg_info "Installing Dependencies"
+$STD apt-get -y install curl
+$STD apt-get -y install sudo
+$STD apt-get -y install gnupg
+$STD apt-get -y install openjdk-8-jre-headless
+$STD apt-get -y install jsvc
+$STD apt-get install -y wget
+wget -qL https://repo.mongodb.org/apt/ubuntu/dists/bionic/mongodb-org/3.6/multiverse/binary-amd64/mongodb-org-server_3.6.23_amd64.deb
+$STD dpkg -i mongodb-org-server_3.6.23_amd64.deb
+$STD apt-get install -y netcat
+$STD apt-get install -y dnsutils
+msg_ok "Installed Dependencies"
+
 set +e
 alias die=''
 if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
@@ -80,16 +93,6 @@ msg_info "Updating Container OS"
 $STD apt-get update
 $STD apt-get -y upgrade
 msg_ok "Updated Container OS"
-
-msg_info "Installing Dependencies"
-$STD apt-get -y install curl
-$STD apt-get -y install sudo
-$STD apt-get -y install gnupg
-$STD apt-get -y install openjdk-8-jre-headless
-$STD apt-get -y install jsvc
-wget -qL https://repo.mongodb.org/apt/ubuntu/dists/bionic/mongodb-org/3.6/multiverse/binary-amd64/mongodb-org-server_3.6.23_amd64.deb
-$STD dpkg -i mongodb-org-server_3.6.23_amd64.deb
-msg_ok "Installed Dependencies"
 
 msg_info "Installing Omada Controller v5.7.4"
 wget -qL https://static.tp-link.com/upload/software/2022/202211/20221121/Omada_SDN_Controller_v5.7.4_Linux_x64.deb

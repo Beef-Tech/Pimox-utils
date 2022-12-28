@@ -60,6 +60,23 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
+msg_info "Installing Dependencies (Patience)"
+$STD apt-get install -y curl
+$STD apt-get install -y sudo
+$STD apt-get install -y gcc
+$STD apt-get install -y g++
+$STD apt-get install -y git
+$STD apt-get install -y gnupg
+$STD apt-get install -y make
+$STD apt-get install -y zip
+$STD apt-get install -y unzip
+$STD apt-get install -y exiftool
+$STD apt-get install -y ffmpeg
+$STD apt-get install -y netcat
+$STD apt-get install -y dnsutils
+$STD apt-get install -y wget
+msg_ok "Installed Dependencies"
+
 set +e
 alias die=''
 if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
@@ -81,20 +98,6 @@ msg_info "Updating Container OS"
 $STD apt-get update
 $STD apt-get -y upgrade
 msg_ok "Updated Container OS"
-
-msg_info "Installing Dependencies (Patience)"
-$STD apt-get install -y curl
-$STD apt-get install -y sudo
-$STD apt-get install -y gcc
-$STD apt-get install -y g++
-$STD apt-get install -y git
-$STD apt-get install -y gnupg
-$STD apt-get install -y make
-$STD apt-get install -y zip
-$STD apt-get install -y unzip
-$STD apt-get install -y exiftool
-$STD apt-get install -y ffmpeg
-msg_ok "Installed Dependencies"
 
 msg_info "Setting up Node.js Repository"
 $STD bash <(curl -fsSL https://deb.nodesource.com/setup_18.x)

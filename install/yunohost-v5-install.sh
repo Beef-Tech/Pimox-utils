@@ -58,6 +58,19 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
+msg_info "Installing Dependencies"
+$STD apt-get install -y curl
+$STD apt-get install -y sudo
+$STD apt-get install -y gnupg
+$STD apt-key adv --fetch-keys 'https://packages.sury.org/php/apt.gpg'
+$STD apt-get install -y apt-transport-https
+$STD apt-get install -y lsb-release
+$STD apt-get install -y ca-certificates
+$STD apt-get install -y netcat
+$STD apt-get install -y dnsutils
+$STD apt-get install -y wget
+msg_ok "Installed Dependencies"
+
 set +e
 alias die=''
 if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
@@ -79,16 +92,6 @@ msg_info "Updating Container OS"
 $STD apt-get update
 $STD apt-get -y upgrade
 msg_ok "Updated Container OS"
-
-msg_info "Installing Dependencies"
-$STD apt-get install -y curl
-$STD apt-get install -y sudo
-$STD apt-get install -y gnupg
-$STD apt-key adv --fetch-keys 'https://packages.sury.org/php/apt.gpg'
-$STD apt-get install -y apt-transport-https
-$STD apt-get install -y lsb-release
-$STD apt-get install -y ca-certificates
-msg_ok "Installed Dependencies"
 
 msg_info "Installing YunoHost (Patience)"
 wget -q -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg

@@ -60,6 +60,15 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
+msg_info "Installing Dependencies (Patience)"
+$STD apt-get install -y curl
+$STD apt-get install -y sudo
+$STD apt-get install -y ufw
+$STD apt-get install -y ntp
+$STD apt-get install -y netcat
+$STD apt-get install -y dnsutils
+msg_ok "Installed Dependencies"
+
 set +e
 alias die=''
 if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
@@ -81,13 +90,6 @@ msg_info "Updating Container OS"
 $STD apt-get update
 $STD apt-get -y upgrade
 msg_ok "Updated Container OS"
-
-msg_info "Installing Dependencies"
-$STD apt-get install -y curl
-$STD apt-get install -y sudo
-$STD apt-get install -y ufw
-$STD apt-get install -y ntp
-msg_ok "Installed Dependencies"
 
 msg_info "Installing Pi-hole"
 mkdir -p /etc/pihole/

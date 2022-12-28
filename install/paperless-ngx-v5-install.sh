@@ -59,6 +59,27 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
+msg_info "Installing Dependencies"
+$STD apt-get install -y --no-install-recommends \
+	python3 \
+	python3-pip \
+	python3-dev \
+	imagemagick \
+	fonts-liberation \
+	optipng \
+	gnupg \
+	libpq-dev \
+	libmagic-dev \
+	mime-support \
+	libzbar0 \
+	poppler-utils \
+	default-libmysqlclient-dev \
+	sudo
+$STD apt-get install -y netcat
+$STD apt-get install -y dnsutils
+$STD apt-get install -y wget
+msg_ok "Installed Dependencies"
+
 set +e
 alias die=''
 if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
@@ -80,24 +101,6 @@ msg_info "Updating Container OS"
 $STD apt-get update
 $STD apt-get -y upgrade
 msg_ok "Updated Container OS"
-
-msg_info "Installing Paperless-ngx Dependencies"
-$STD apt-get install -y --no-install-recommends \
-	python3 \
-	python3-pip \
-	python3-dev \
-	imagemagick \
-	fonts-liberation \
-	optipng \
-	gnupg \
-	libpq-dev \
-	libmagic-dev \
-	mime-support \
-	libzbar0 \
-	poppler-utils \
-	default-libmysqlclient-dev \
-	sudo
-msg_ok "Installed Paperless-ngx Dependencies"
 
 msg_info "Installing OCR Dependencies"
 $STD apt-get install -y --no-install-recommends \

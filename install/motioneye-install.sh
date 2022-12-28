@@ -59,6 +59,14 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
+msg_info "Installing Dependencies"
+apt-get install -y curl &>/dev/null
+apt-get install -y sudo &>/dev/null
+apt-get install -y cifs-utils &>/dev/null
+apt-get install -y netcat &>/dev/null
+apt-get install -y dnsutils &>/dev/null
+msg_ok "Installed Dependencies"
+
 set +e
 alias die=''
 if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
@@ -78,14 +86,8 @@ set -e
 
 msg_info "Updating Container OS"
 apt-get update &>/dev/null
-apt-get -y upgrade &>/dev/null
+apt-get -y dist-upgrade &>/dev/null
 msg_ok "Updated Container OS"
-
-msg_info "Installing Dependencies"
-apt-get install -y curl &>/dev/null
-apt-get install -y sudo &>/dev/null
-apt-get install -y cifs-utils &>/dev/null
-msg_ok "Installed Dependencies"
 
 msg_info "Installing Motion"
 apt-get install motion -y &>/dev/null

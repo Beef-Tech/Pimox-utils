@@ -59,6 +59,16 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
+msg_info "Installing Dependencies"
+apt-get install -y curl &>/dev/null
+apt-get install -y sudo &>/dev/null
+apt-get install -y apt-transport-https &>/dev/null
+apt-get install -y software-properties-common &>/dev/null
+apt-get install -y netcat &>/dev/null
+apt-get install -y dnsutils &>/dev/null
+apt-get install -y wget &>/dev/null
+msg_ok "Installed Dependencies"
+
 set +e
 alias die=''
 if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
@@ -75,18 +85,6 @@ RESOLVEDIP=$(nslookup "github.com" | awk -F':' '/^Address: / { matched = 1 } mat
 if [[ -z "$RESOLVEDIP" ]]; then msg_error "DNS Lookup Failure"; else msg_ok "DNS Resolved github.com to $RESOLVEDIP"; fi
 alias die='EXIT=$? LINE=$LINENO error_exit'
 set -e
-
-msg_info "Updating Container OS"
-apt-get update &>/dev/null
-apt-get -y upgrade &>/dev/null
-msg_ok "Updated Container OS"
-
-msg_info "Installing Dependencies"
-apt-get install -y curl &>/dev/null
-apt-get install -y sudo &>/dev/null
-apt-get install -y apt-transport-https &>/dev/null
-apt-get install -y software-properties-common &>/dev/null
-msg_ok "Installed Dependencies"
 
 if [[ -z "$(grep -w "100000" /proc/self/uid_map)" ]]; then
   msg_info "Setting Up Hardware Acceleration"

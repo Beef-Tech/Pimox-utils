@@ -59,29 +59,7 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
-set +e
-alias die=''
-if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
-  msg_error "Internet NOT Connected"
-    read -r -p "Would you like to continue anyway? <y/N> " prompt
-    if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]; then
-      echo -e " ⚠️  ${RD}Expect Issues Without Internet${CL}"
-    else
-      echo -e " 🖧  Check Network Settings"
-      exit 1
-    fi
-fi
-RESOLVEDIP=$(nslookup "github.com" | awk -F':' '/^Address: / { matched = 1 } matched { print $2}' | xargs)
-if [[ -z "$RESOLVEDIP" ]]; then msg_error "DNS Lookup Failure"; else msg_ok "DNS Resolved github.com to $RESOLVEDIP"; fi
-alias die='EXIT=$? LINE=$LINENO error_exit'
-set -e
-
-msg_info "Updating Container OS"
-$STD apt-get update
-$STD apt-get -y upgrade
-msg_ok "Updated Container OS"
-
-msg_info "Installing Dependencies (Patience)"
+msg_info "Installing Dependencies"
 $STD apt-get install -y \
   make \
   build-essential \
@@ -110,7 +88,31 @@ $STD apt-get install -y \
   libtiff5 \
   libturbojpeg0-dev \
   liblzma-dev
+$STD apt-get install -y netcat
+$STD apt-get install -y dnsutils
 msg_ok "Installed Dependencies"
+
+set +e
+alias die=''
+if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
+  msg_error "Internet NOT Connected"
+    read -r -p "Would you like to continue anyway? <y/N> " prompt
+    if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]; then
+      echo -e " ⚠️  ${RD}Expect Issues Without Internet${CL}"
+    else
+      echo -e " 🖧  Check Network Settings"
+      exit 1
+    fi
+fi
+RESOLVEDIP=$(nslookup "github.com" | awk -F':' '/^Address: / { matched = 1 } matched { print $2}' | xargs)
+if [[ -z "$RESOLVEDIP" ]]; then msg_error "DNS Lookup Failure"; else msg_ok "DNS Resolved github.com to $RESOLVEDIP"; fi
+alias die='EXIT=$? LINE=$LINENO error_exit'
+set -e
+
+msg_info "Updating Container OS"
+$STD apt-get update
+$STD apt-get -y upgrade
+msg_ok "Updated Container OS"
 
 msg_info "Installing Linux D-Bus Message Broker"
 cat <<EOF >>/etc/apt/sources.list

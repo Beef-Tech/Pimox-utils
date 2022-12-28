@@ -59,6 +59,19 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
+msg_info "Installing Dependencies"
+apt-get -y install curl &>/dev/null
+apt-get -y install sudo &>/dev/null
+apt-get -y install gnupg &>/dev/null
+apt-get -y install openjdk-8-jre-headless &>/dev/null
+apt-get -y install jsvc &>/dev/null
+apt-get install -y wget &>/dev/null
+wget -qL https://repo.mongodb.org/apt/ubuntu/dists/bionic/mongodb-org/3.6/multiverse/binary-amd64/mongodb-org-server_3.6.23_amd64.deb
+sudo dpkg -i mongodb-org-server_3.6.23_amd64.deb &>/dev/null
+apt-get install -y netcat &>/dev/null
+apt-get install -y dnsutils &>/dev/null
+msg_ok "Installed Dependencies"
+
 set +e
 alias die=''
 if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
@@ -78,18 +91,8 @@ set -e
 
 msg_info "Updating Container OS"
 apt-get update &>/dev/null
-apt-get -y upgrade &>/dev/null
+apt-get -y dist-upgrade &>/dev/null
 msg_ok "Updated Container OS"
-
-msg_info "Installing Dependencies"
-apt-get -y install curl &>/dev/null
-apt-get -y install sudo &>/dev/null
-apt-get -y install gnupg &>/dev/null
-apt-get -y install openjdk-8-jre-headless &>/dev/null
-apt-get -y install jsvc &>/dev/null
-wget -qL https://repo.mongodb.org/apt/ubuntu/dists/bionic/mongodb-org/3.6/multiverse/binary-amd64/mongodb-org-server_3.6.23_amd64.deb
-sudo dpkg -i mongodb-org-server_3.6.23_amd64.deb &>/dev/null
-msg_ok "Installed Dependencies"
 
 msg_info "Installing Omada Controller v5.6.3"
 wget -qL https://static.tp-link.com/upload/software/2022/202211/20221121/Omada_SDN_Controller_v5.7.4_Linux_x64.deb

@@ -113,19 +113,31 @@ msg_ok "Using ${BL}$TEMPLATE_STORAGE${CL} ${GN}for Template Storage."
 CONTAINER_STORAGE=$(select_storage container) || exit
 msg_ok "Using ${BL}$CONTAINER_STORAGE${CL} ${GN}for Container Storage."
 
-msg_info "Updating LXC Template List"
-pveam update >/dev/null
-msg_ok "Updated LXC Template List"
-
-TEMPLATE_SEARCH=${PCT_OSTYPE}-${PCT_OSVERSION:-}
-mapfile -t TEMPLATES < <(pveam available -section system | sed -n "s/.*\($TEMPLATE_SEARCH.*\)/\1/p" | sort -t - -k 2 -V)
-[ ${#TEMPLATES[@]} -gt 0 ] || die "Unable to find a template when searching for '$TEMPLATE_SEARCH'."
-TEMPLATE="${TEMPLATES[-1]}"
-
+msg_info "Check LXC Template"
+case ${PCT_OSTYPE} in
+  debian)
+    case $PCT_OSVERSION in
+      11)
+        PCT_OSVERSIONNAME="bullseye"
+        ;;
+      *)
+        die "Unknown or unmanaged os version : $PCT_OSVERSION"
+        ;;
+    esac
+    ;;
+  *)
+    die "Unknown or unmanaged os type : $PCT_OSTYPE"
+    ;;
+esac
+ARM64_REPO="https://us.lxd.images.canonical.com/images/$PCT_OSTYPE/$PCT_OSVERSIONNAME/arm64/cloud/"
+readarray -t REPO_FILES < <(wget -O - "$ARM64_REPO" | grep -E 'alt=\"\[DIR\]\"' | grep -o '<a href=".*">.*</a>' | sed -r 's/.*href="\.\/([^"]+)\/.*/\1/g')
+[ ${#REPO_FILES[@]} -gt 0 ] || die "Unable to find a template when searching for '$PCT_OSTYPE' in version '$PCT_OSVERSIONNAME'."
+IMAGE_NAME=${REPO_FILES[-1]}
+TEMPLATE_URI="${ARM64_REPO}/${IMAGE_NAME}/rootfs.tar.xz"
+TEMPLATE="${PCT_OSTYPE}-${PCT_OSVERSION}-cloud_${IMAGE_NAME}_arm64.tar.xz"
 if ! pveam list $TEMPLATE_STORAGE | grep -q $TEMPLATE; then
   msg_info "Downloading LXC Template"
-  pveam download $TEMPLATE_STORAGE $TEMPLATE >/dev/null ||
-    die "A problem occured while downloading the LXC template."
+  wget -O "/var/lib/vz/template/cache/${TEMPLATE}" $TEMPLATE_URI >/dev/null || die "A problem occured while downloading the LXC template."
   msg_ok "Downloaded LXC Template"
 fi
 

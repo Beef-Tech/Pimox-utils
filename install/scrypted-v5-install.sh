@@ -58,6 +58,29 @@ done
 msg_ok "Set up Container OS"
 msg_ok "Network Connected: ${BL}$(hostname -I)"
 
+msg_info "Installing Dependencies"
+$STD apt-get -y install software-properties-common apt-utils
+$STD apt-get -y update
+$STD apt-get -y upgrade
+$STD apt-get -y install \
+    build-essential \
+    gcc \
+    gir1.2-gtk-3.0 \
+    libcairo2-dev \
+    libgirepository1.0-dev \
+    libglib2.0-dev \
+    libjpeg-dev \
+    libgif-dev \
+    libopenjp2-7 \
+    libpango1.0-dev \
+    librsvg2-dev \
+    pkg-config \
+    curl \
+    sudo
+$STD apt-get install -y netcat
+$STD apt-get install -y dnsutils
+msg_ok "Installed Dependencies"
+
 set +e
 alias die=''
 if nc -zw1 8.8.8.8 443; then msg_ok "Internet Connected"; else
@@ -79,27 +102,6 @@ msg_info "Updating Container OS"
 $STD apt-get update
 $STD apt-get -y upgrade
 msg_ok "Updated Container OS"
-
-msg_info "Installing Dependencies"
-$STD apt-get -y install software-properties-common apt-utils
-$STD apt-get -y update
-$STD apt-get -y upgrade
-$STD apt-get -y install \
-    build-essential \
-    gcc \
-    gir1.2-gtk-3.0 \
-    libcairo2-dev \
-    libgirepository1.0-dev \
-    libglib2.0-dev \
-    libjpeg-dev \
-    libgif-dev \
-    libopenjp2-7 \
-    libpango1.0-dev \
-    librsvg2-dev \
-    pkg-config \
-    curl \
-    sudo
-msg_ok "Installed Dependencies"
 
 msg_info "Installing GStreamer"
 $STD apt-get -y install \
