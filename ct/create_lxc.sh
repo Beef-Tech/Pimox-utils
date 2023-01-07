@@ -129,7 +129,7 @@ case ${PCT_OSTYPE} in
     die "Unknown or unmanaged os type : $PCT_OSTYPE"
     ;;
 esac
-ARM64_REPO="https://us.lxd.images.canonical.com/images/$PCT_OSTYPE/$PCT_OSVERSIONNAME/arm64/cloud/"
+ARM64_REPO="https://uk.lxd.images.canonical.com/images/$PCT_OSTYPE/$PCT_OSVERSIONNAME/arm64/cloud/"
 readarray -t REPO_FILES < <(wget -O - "$ARM64_REPO" | grep -E 'alt=\"\[DIR\]\"' | grep -o '<a href=".*">.*</a>' | sed -r 's/.*href="\.\/([^"]+)\/.*/\1/g')
 [ ${#REPO_FILES[@]} -gt 0 ] || die "Unable to find a template when searching for '$PCT_OSTYPE' in version '$PCT_OSVERSIONNAME'."
 IMAGE_NAME=${REPO_FILES[-1]}
