@@ -87,7 +87,7 @@ set -e
 
 msg_info "Updating Container OS"
 apt-get update &>/dev/null
-apt-get -y dist-upgrade &>/dev/null
+apt-get -y upgrade &>/dev/null
 msg_ok "Updated Container OS"
 
 if [[ -z "$(grep -w "100000" /proc/self/uid_map)" ]]; then

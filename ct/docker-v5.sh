@@ -321,7 +321,7 @@ clear
 header_info
 msg_info "Updating ${APP} LXC"
 apt-get update &>/dev/null
-apt-get -y dist-upgrade &>/dev/null
+apt-get -y upgrade &>/dev/null
 msg_ok "Updated ${APP} LXC"
 exit
 }

@@ -111,7 +111,7 @@ read -r -p "Update Proxmox VE 7 now? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]; then
     msg_info "Updating Proxmox VE 7 (Patience)"
     apt-get update &>/dev/null
-    apt-get -y dist-upgrade &>/dev/null
+    apt-get -y upgrade &>/dev/null
     msg_ok "Updated Proxmox VE 7 (⚠ Reboot Recommended)"
 fi
 

@@ -103,7 +103,7 @@ read -r -p "Update Proxmox Backup Server now? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]; then
     msg_info "Updating Proxmox Backup Server (Patience)"
     apt-get update &>/dev/null
-    apt-get -y dist-upgrade &>/dev/null
+    apt-get -y upgrade &>/dev/null
     msg_ok "Updated Proxmox Backup Server (⚠ Reboot Recommended)"
 fi
 

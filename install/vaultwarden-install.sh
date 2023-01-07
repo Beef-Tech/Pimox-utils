@@ -92,7 +92,7 @@ set -e
 
 msg_info "Updating Container OS"
 apt-get update &>/dev/null
-apt-get -y dist-upgrade &>/dev/null
+apt-get -y upgrade &>/dev/null
 msg_ok "Updated Container OS"
 
 WEBVAULT=$(curl -s https://api.github.com/repos/dani-garcia/bw_web_builds/releases/latest |

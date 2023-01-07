@@ -87,7 +87,7 @@ set -e
 
 msg_info "Updating Container OS"
 apt-get update --fix-missing &>/dev/null
-apt-get -y dist-upgrade &>/dev/null
+apt-get -y upgrade &>/dev/null
 msg_ok "Updated Container OS"
 
 ubuntuversion=$(lsb_release -r | awk '{print $2}' | cut -d . -f1)
